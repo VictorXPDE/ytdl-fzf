@@ -1,7 +1,7 @@
 # ytdl-fzf 
 Um script simples para baixar vídeos do YouTube, Twitter, Reddit e outros sites com um Fuzzy Finder.
 
-[[English version]](english readme)
+[[English version]][english readme]
 
 [english readme]: https://github.com/VictorXPDE/ytdl-fzf/blob/master/README-English.md
 
