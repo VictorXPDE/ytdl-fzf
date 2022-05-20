@@ -6,7 +6,7 @@ then
 elif [[ $1 = "v" ]]
 then
     video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
-    if [[${#video_menu} > 0 ]]
+    if [[ ${#video_menu} > 0 ]]
     then
         yt-dlp -f $video_menu $2
     else
