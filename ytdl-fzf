@@ -1,15 +1,32 @@
 #!/bin/bash
 
-if [ $1 = "a" ]
+if [[ $1 = "a" ]]
 then
     yt-dlp -x --audio-format mp3 $2
-elif [ $1 = "v" ]
+elif [[ $1 = "v" ]]
 then
-    video_id=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
-    yt-dlp -f $video_id $2
+    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+    if [[${#video_menu} > 0 ]]
+    then
+        yt-dlp -f $video_menu $2
+    else
+        exit 
+    fi
 elif [[ $1 = "a+v" || $1 = "v+a" ]]
 then
-    video_id=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
-    audio_id=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
-    yt-dlp -f $video_id+$audio_id $2
+    video_id=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g')
+    id=`echo -e "$video_id"`
+    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+    if [[ ${#video_menu} > 0 ]]
+    then
+        audio_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+        if [[ ${#audio_menu} > 0 ]]
+        then
+            yt-dlp -f $video_menu+$audio_menu $2
+        else
+            exit 
+        fi
+    else
+        exit 
+    fi
 fi
