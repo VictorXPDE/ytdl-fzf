@@ -32,3 +32,5 @@ Example:
 ```
 $ ytdl-fzf a+v https://www.youtube.com/watch?v=Wb3UrJjAac4
 ```
+
+To quit the script you just have to press `<ESC>`

@@ -36,3 +36,5 @@ Exemplo:
 ```
 $ ytdl-fzf a+v https://www.youtube.com/watch?v=Wb3UrJjAac4
 ```
+
+Para sair do script é só apertar `<ESC>`
