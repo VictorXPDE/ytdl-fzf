@@ -1,4 +1,31 @@
 #!/bin/bash
+usage_br () {
+	echo "uso: ytdl-fzf <formato> <url>"
+	echo ""
+	echo "formatos:"
+	echo "    a para áudio."
+	echo "    v para vídeo."
+	echo "    a+v ou v+a para áudio e vídeo junto."
+	echo ""
+	echo "exemplo:"
+	echo ""
+	echo "ytdl-fzf a+v https://www.youtube.com/watch?v=Wb3UrJjAac4"
+}
+usage_us () {
+	echo "usage:"
+	echo ""
+	echo "ytdl-fzf <format> <url>"
+	echo ""
+	echo "formats:"
+	echo ""
+	echo "    a for audio."
+	echo "    v for video."
+	echo "    a+v or v+a for audio and video together."
+	echo ""
+	echo "example:"
+	echo ""
+	echo "ytdl-fzf a+v https://www.youtube.com/watch?v=Wb3UrJjAac4"
+}
 
 if [[ $1 = "a" ]]
 then
@@ -29,4 +56,14 @@ then
     else
         exit 
     fi
+else
+	if locale -a | grep -q ^pt_BR
+	then
+		usage_br
+	elif locale -a | grep -q ^en_US
+	then
+		usage_us
+	else
+		usage_us
+	fi
 fi
