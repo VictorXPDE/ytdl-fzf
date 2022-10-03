@@ -60,9 +60,6 @@ else
 	if locale -a | grep -q ^pt_BR
 	then
 		usage_br
-	elif locale -a | grep -q ^en_US
-	then
-		usage_us
 	else
 		usage_us
 	fi
