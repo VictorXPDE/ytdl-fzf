@@ -36,7 +36,7 @@ then
     yt-dlp -x --audio-format $audio_format $2
 elif [[ $1 = "v" ]]
 then
-    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
+    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
     if [[ ${#video_menu} > 0 ]]
     then
         yt-dlp -f $video_menu $2
@@ -47,10 +47,10 @@ elif [[ $1 = "a+v" || $1 = "v+a" ]]
 then
     video_id=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g')
     id=`echo -e "$video_id"`
-    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
+    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
     if [[ ${#video_menu} > 0 ]]
     then
-        audio_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
+        audio_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
         if [[ ${#audio_menu} > 0 ]]
         then
             yt-dlp -f $video_menu+$audio_menu $2
