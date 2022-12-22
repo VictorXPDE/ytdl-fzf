@@ -27,13 +27,16 @@ usage_us () {
 	echo "ytdl-fzf a+v https://www.youtube.com/watch?v=Wb3UrJjAac4"
 }
 
+formats_path=$HOME/.cache/ytformats.txt
+yt-dlp -F $2 > $formats_path
+
 if [[ $1 = "a" ]]
 then
     audio_format=$(echo -e "aac\nalac\nflac\nm4a\nmp3\nopus\nvorbis\nwav" | fzf --reverse)
     yt-dlp -x --audio-format $audio_format $2
 elif [[ $1 = "v" ]]
 then
-    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
     if [[ ${#video_menu} > 0 ]]
     then
         yt-dlp -f $video_menu $2
@@ -44,18 +47,10 @@ elif [[ $1 = "a+v" || $1 = "v+a" ]]
 then
     video_id=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g')
     id=`echo -e "$video_id"`
-
-    # TODO
-    # add a more efficient way to show the id list of the video in the preview
-    # so it doesn't execute yt-dlp everytime you select a id in the fzf
-    #
-    # adicionar uma maneira mais eficiente de mostrar a lista de id na preview
-    # em vez de ficar executando o yt-dlp toda hora q vc seleciona um id no fzf
-
-    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+    video_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
     if [[ ${#video_menu} > 0 ]]
     then
-        audio_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "yt-dlp -F '$2'")
+        audio_menu=$(yt-dlp -F $2 | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$formats_path'")
         if [[ ${#audio_menu} > 0 ]]
         then
             yt-dlp -f $video_menu+$audio_menu $2
