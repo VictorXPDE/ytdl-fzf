@@ -39,7 +39,13 @@ then
     video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
     if [[ ${#video_menu} > 0 ]]
     then
-        yt-dlp -f $video_menu $2
+        video_format=$(echo -e "avi\nflv\nmkv\nmov\nmp4\nwebm" | fzf --reverse)
+        if [[ ${#video_format} > 0 ]]
+        then
+            yt-dlp -f $video_menu --recode-video $video_format $2
+        else
+            exit
+        fi
     else
         exit 
     fi
@@ -53,7 +59,13 @@ then
         audio_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
         if [[ ${#audio_menu} > 0 ]]
         then
-            yt-dlp -f $video_menu+$audio_menu $2
+            video_format=$(echo -e "avi\nflv\nmkv\nmov\nmp4\nwebm" | fzf --reverse)
+            if [[ ${#video_format} > 0 ]]
+            then
+                yt-dlp -f $video_menu+$audio_menu --recode-video $video_format $2
+            else
+                exit
+            fi
         else
             exit 
         fi
