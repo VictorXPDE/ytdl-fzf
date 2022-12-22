@@ -28,21 +28,21 @@ usage_us () {
 }
 
 id_path=$HOME/.cache/ytids.txt
-yt-dlp -F $2 > $id_path
+yt-dlp -F "$2" > "$id_path"
 
 if [[ $1 = "a" ]]
 then
     audio_format=$(echo -e "aac\nalac\nflac\nm4a\nmp3\nopus\nvorbis\nwav" | fzf --reverse)
-    yt-dlp -x --audio-format $audio_format $2
+    yt-dlp -x --audio-format "$audio_format" "$2"
 elif [[ $1 = "v" ]]
 then
-    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
-    if [[ ${#video_menu} > 0 ]]
+    video_menu=$(sed -e '1,/-$/d' -e 's/ .*//g' < "$id_path" | fzf --reverse --preview "cat '$id_path'")
+    if [[ ${#video_menu} -gt 0 ]]
     then
         video_format=$(echo -e "avi\nflv\nmkv\nmov\nmp4\nwebm" | fzf --reverse)
-        if [[ ${#video_format} > 0 ]]
+        if [[ ${#video_format} -gt 0 ]]
         then
-            yt-dlp -f $video_menu --recode-video $video_format $2
+            yt-dlp -f "$video_menu" --recode-video "$video_format" "$2"
         else
             exit
         fi
@@ -51,18 +51,16 @@ then
     fi
 elif [[ $1 = "a+v" || $1 = "v+a" ]]
 then
-    video_id=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g')
-    id=`echo -e "$video_id"`
-    video_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
-    if [[ ${#video_menu} > 0 ]]
+    video_menu=$(sed -e '1,/-$/d' -e 's/ .*//g' < "$id_path" | fzf --reverse --preview "cat '$id_path'")
+    if [[ ${#video_menu} -gt 0 ]]
     then
-        audio_menu=$(cat $id_path | sed -e '1,/-$/d' -e 's/ .*//g' | fzf --reverse --preview "cat '$id_path'")
-        if [[ ${#audio_menu} > 0 ]]
+        audio_menu=$(sed -e '1,/-$/d' -e 's/ .*//g' < "$id_path" | fzf --reverse --preview "cat '$id_path'")
+        if [[ ${#audio_menu} -gt 0 ]]
         then
             video_format=$(echo -e "avi\nflv\nmkv\nmov\nmp4\nwebm" | fzf --reverse)
-            if [[ ${#video_format} > 0 ]]
+            if [[ ${#video_format} -gt 0 ]]
             then
-                yt-dlp -f $video_menu+$audio_menu --recode-video $video_format $2
+                yt-dlp -f "$video_menu"+"$audio_menu" --recode-video "$video_format" "$2"
             else
                 exit
             fi
